@@ -1,4 +1,4 @@
-package com.example.servlets;
+package com.example.servlets.conf;
 
 import jakarta.servlet.*;
 

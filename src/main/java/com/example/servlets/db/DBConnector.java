@@ -1,4 +1,4 @@
-package com.example.servlets;
+package com.example.servlets.db;
 
 
 import java.sql.Connection;

@@ -1,9 +1,6 @@
 package com.example.servlets.dto;
 
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.Setter;
-import lombok.ToString;
+import lombok.*;
 
 import java.time.LocalDateTime;
 
@@ -11,7 +8,9 @@ import java.time.LocalDateTime;
 @Getter
 @AllArgsConstructor
 @ToString
+@NoArgsConstructor
 public class TaskDTO {
+    Long id;
     private String name;
     private String description;
 
