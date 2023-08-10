@@ -40,7 +40,6 @@ public class AuthDAO {
             statement.setString(1, login);
             ResultSet resultSet = statement.executeQuery();
             if (resultSet.next()) {
-                System.out.println("aaaaaaaa");
                 return false;
             }
         }catch (SQLException e){

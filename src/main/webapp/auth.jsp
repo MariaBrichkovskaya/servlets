@@ -17,6 +17,6 @@
     <b>Пароль </b><input name="password" type="password">
     <button>Войти</button>
 </form>
-<a href="registration.jsp">Зарегистрироваться</a>
+<a href="/registration">Зарегистрироваться</a>
 </body>
 </html>

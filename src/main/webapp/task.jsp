@@ -15,8 +15,9 @@
 </head>
 <body>
 <h1>Список задач</h1><br>
+<a href="/AuthServlet">Выйти</a><br><br>
 <%
-    String login = CheckAuth.checkAuth(request, response);
+    CheckAuth.checkAuth(request, response);
 %>
 <%
     List<TaskDTO> tasks = TaskDAO.getTasks();
@@ -24,6 +25,7 @@
         out.print("<b>Название: </b>" + task.getName() + "<br>");
         out.print("<b>Описание: </b>" + task.getDescription() + "<br>");
         out.print("<b>Дата и время: </b>" + task.getTime() + "<br>");
+        out.println("<br>");
     }
 %>
 

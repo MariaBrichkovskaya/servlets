@@ -12,10 +12,12 @@ public class RegServlet extends HttpServlet {
 
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        if(!AuthDAO.isLoginUnique((String) request.getAttribute("login"))){
+        if(!AuthDAO.isLoginUnique(request. getParameter("login"))){
             response.sendRedirect("/registration");
+        }else {
+            AuthDAO.addUser(request.getParameter("login"),request.getParameter("password"));
+            response.sendRedirect("/auth");
         }
-        AuthDAO.addUser((String) request.getAttribute("login"), (String) request.getAttribute("password"));
-        response.sendRedirect("/auth");
+
     }
 }

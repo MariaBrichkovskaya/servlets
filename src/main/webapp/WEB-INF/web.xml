@@ -28,4 +28,12 @@
         <servlet-name>AuthJSP</servlet-name>
         <url-pattern>/auth</url-pattern>
     </servlet-mapping>
+    <servlet>
+        <servlet-name>RegJSP</servlet-name>
+        <jsp-file>/registration.jsp</jsp-file>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>RegJSP</servlet-name>
+        <url-pattern>/registration</url-pattern>
+    </servlet-mapping>
 </web-app>

@@ -12,13 +12,27 @@ public class AuthServlet extends HttpServlet {
 
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        if(!AuthDAO.isAuth((String) request.getAttribute("login"), (String) request.getAttribute("password"))){
+        String login=request.getParameter("login");
+        if(!AuthDAO.isAuth(login,request.getParameter("password"))){
             response.sendRedirect("/auth");
+        }else {
+            HttpSession session= request.getSession();
+            session.setAttribute("login",login);
+            session.setMaxInactiveInterval(-1);
+            Cookie cookie=new Cookie("SessionId",session.getId());
+            cookie.setMaxAge(-1);
+            response.addCookie(cookie);
+            response.sendRedirect("/task");
         }
-        Cookie cookie = new Cookie("id",(String) request.getAttribute("login") );
-        cookie.setMaxAge(-1);
+    }
+    @Override
+    protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        HttpSession session= request.getSession();
+        session.setAttribute("SessionId","");
+        session.setMaxInactiveInterval(-1);
+        Cookie cookie=new Cookie("SessionId",session.getId());
+        cookie.setMaxAge(0);
         response.addCookie(cookie);
-        response.sendRedirect("/task");
-
+        response.sendRedirect("/auth");
     }
 }
