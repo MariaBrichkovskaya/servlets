@@ -7,6 +7,16 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 
 public class AuthDAO {
+   /* private AuthDAO() {
+    }
+
+    private static final class SingletonHolder {
+        private static final AuthDAO INSTANCE = new AuthDAO();
+    }
+
+    public static AuthDAO getInstance() {
+        return SingletonHolder.INSTANCE;
+    }*/
     public static boolean isAuth(String login,String password){
         try(PreparedStatement statement = DBConnector.CONNECTION.prepareStatement("SELECT * FROM users where login=? and password=?");) {
             statement.setString(1,login);
@@ -46,6 +56,15 @@ public class AuthDAO {
             e.printStackTrace();
         }
         return true;
+    }
+    public static void deleteUser(String login,String password){
+        try(PreparedStatement statement = DBConnector.CONNECTION.prepareStatement("delete from users where login=? and password =?");) {
+            statement.setString(1, login);
+            statement.setString(2, password);
+            statement.executeUpdate();
+        } catch (NullPointerException | SQLException e) {
+            e.printStackTrace();
+        }
     }
 
 }
