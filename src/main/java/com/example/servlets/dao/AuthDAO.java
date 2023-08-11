@@ -5,20 +5,21 @@ import com.example.servlets.db.DBConnector;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.Objects;
 
 public class AuthDAO {
-   /* private AuthDAO() {
-    }
 
-    private static final class SingletonHolder {
-        private static final AuthDAO INSTANCE = new AuthDAO();
+    private AuthDAO(){
     }
-
-    public static AuthDAO getInstance() {
-        return SingletonHolder.INSTANCE;
-    }*/
-    public static boolean isAuth(String login,String password){
-        try(PreparedStatement statement = DBConnector.CONNECTION.prepareStatement("SELECT * FROM users where login=? and password=?");) {
+    private static volatile AuthDAO instance;
+    public static synchronized AuthDAO getInstance() {
+        if (instance == null) {
+            instance = new AuthDAO();
+        }
+        return instance;
+    }
+        public boolean isAuth(String login,String password){
+        try(PreparedStatement statement = Objects.requireNonNull(DBConnector.getConnection()).prepareStatement("SELECT * FROM users where login=? and password=?");) {
             statement.setString(1,login);
             statement.setString(2,password);
             ResultSet resultSet=statement.executeQuery();
@@ -35,8 +36,8 @@ public class AuthDAO {
         }
 
     }
-    public static void addUser(String login,String password){
-        try(PreparedStatement statement = DBConnector.CONNECTION.prepareStatement("INSERT INTO users (login, password) Values (?, ?)");) {
+    public void addUser(String login,String password){
+        try(PreparedStatement statement = Objects.requireNonNull(DBConnector.getConnection()).prepareStatement("INSERT INTO users (login, password) Values (?, ?)");) {
             statement.setString(1, login);
             statement.setString(2, password);
             statement.executeUpdate();
@@ -44,9 +45,9 @@ public class AuthDAO {
             e.printStackTrace();
         }
     }
-    public static boolean isLoginUnique(String login) {
+    public boolean isLoginUnique(String login) {
 
-        try(PreparedStatement statement = DBConnector.CONNECTION.prepareStatement("SELECT login FROM users WHERE login = ?");) {
+        try(PreparedStatement statement = Objects.requireNonNull(DBConnector.getConnection()).prepareStatement("SELECT login FROM users WHERE login = ?");) {
             statement.setString(1, login);
             ResultSet resultSet = statement.executeQuery();
             if (resultSet.next()) {
@@ -57,14 +58,14 @@ public class AuthDAO {
         }
         return true;
     }
-    public static void deleteUser(String login,String password){
-        try(PreparedStatement statement = DBConnector.CONNECTION.prepareStatement("delete from users where login=? and password =?");) {
+    /*public static void deleteUser(String login,String password){
+        try(PreparedStatement statement = DBConnector.getConnection().prepareStatement("delete from users where login=? and password =?");) {
             statement.setString(1, login);
             statement.setString(2, password);
             statement.executeUpdate();
         } catch (NullPointerException | SQLException e) {
             e.printStackTrace();
         }
-    }
+    }*/
 
 }

@@ -14,17 +14,18 @@ import java.io.PrintWriter;
 
 @WebServlet(name = "taskServlet", value = "/taskServlet")
 public class TaskServlet extends HttpServlet {
+    private static final TaskDAO taskDAO=TaskDAO.getInstance();
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
         PrintWriter out=response.getWriter();
-        out.println(TaskDAO.getTasks());
+        out.println(taskDAO.getTasks());
     }
 
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         CheckAuth.checkAuth(request, response);
         TaskDTO task =new TaskDTO(request.getParameter("name"),request.getParameter("description"));
-        TaskDAO.addTask(task);
+        taskDAO.addTask(task);
         response.sendRedirect("/task");
 
     }
@@ -32,7 +33,7 @@ public class TaskServlet extends HttpServlet {
    /* @Override
     protected void doDelete(HttpServletRequest request, HttpServletResponse response) throws IOException {
         long id= Integer.parseInt(request.getParameter("id"));
-        TaskDAO.deleteTask(id);
+        taskDAO.deleteTask(id);
         response.sendRedirect("/task");
 
     }
@@ -40,7 +41,7 @@ public class TaskServlet extends HttpServlet {
     @Override
     protected void doPut(HttpServletRequest request, HttpServletResponse response) throws IOException {
         long id=Integer.parseInt(request.getParameter("id"));
-        TaskDAO.editTask(request.getParameter("name"),id);
+        taskDAO.editTask(request.getParameter("name"),id);
         response.sendRedirect("/task");
     }*/
 }

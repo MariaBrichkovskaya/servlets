@@ -10,9 +10,18 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class TaskDAO {
-    public static List<TaskDTO> getTasks() {
+    private TaskDAO(){
+    }
+    private static volatile TaskDAO instance;
+    public static synchronized TaskDAO getInstance() {
+        if (instance == null) {
+            instance = new TaskDAO();
+        }
+        return instance;
+    }
+    public List<TaskDTO> getTasks() {
         List<TaskDTO> tasks = new ArrayList<>();
-        try(ResultSet resultSet = DBConnector.CONNECTION.createStatement().executeQuery("SELECT * FROM tasks");) {
+        try(ResultSet resultSet = DBConnector.getConnection().createStatement().executeQuery("SELECT * FROM tasks");) {
 
             while(resultSet.next()) {
                 TaskDTO task = new TaskDTO(resultSet.getLong(1),resultSet.getString(2),resultSet.getString(3),resultSet.getTimestamp(4).toLocalDateTime());
@@ -24,8 +33,8 @@ public class TaskDAO {
         return tasks;
     }
 
-    public static void addTask(TaskDTO task) {
-        try(PreparedStatement statement = DBConnector.CONNECTION.prepareStatement("insert into tasks(name,description,time) values (?,?,?)");) {
+    public void addTask(TaskDTO task) {
+        try(PreparedStatement statement = DBConnector.getConnection().prepareStatement("insert into tasks(name,description,time) values (?,?,?)");) {
             statement.setString(1,task.getName());
             statement.setString(2,task.getDescription());
             statement.setObject(3,task.getTime());
@@ -34,16 +43,16 @@ public class TaskDAO {
             e.printStackTrace();
         }
     }
-    public static void deleteTask(Long id) {
-        try(PreparedStatement statement=  DBConnector.CONNECTION.prepareStatement("delete from tasks where id=?");) {
+    public void deleteTask(Long id) {
+        try(PreparedStatement statement=  DBConnector.getConnection().prepareStatement("delete from tasks where id=?");) {
             statement.setLong(1,id);
             statement.executeUpdate();
         } catch (NullPointerException | SQLException e) {
             e.printStackTrace();
         }
     }
-    public static void editTask(String name, Long id) {
-        try(PreparedStatement statement=  DBConnector.CONNECTION.prepareStatement("UPDATE tasks SET name = ? WHERE id = ?;");) {
+    public void editTask(String name, Long id) {
+        try(PreparedStatement statement=  DBConnector.getConnection().prepareStatement("UPDATE tasks SET name = ? WHERE id = ?;");) {
             statement.setString(1, name);
             statement.setLong(2,id);
             statement.executeUpdate();

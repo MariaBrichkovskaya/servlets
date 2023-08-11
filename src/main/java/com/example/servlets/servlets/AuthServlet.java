@@ -9,11 +9,12 @@ import java.io.IOException;
 
 @WebServlet(name = "AuthServlet", value = "/AuthServlet")
 public class AuthServlet extends HttpServlet {
+    private static final AuthDAO authDAO=AuthDAO.getInstance();
 
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         String login=request.getParameter("login");
-        if(!AuthDAO.isAuth(login,request.getParameter("password"))){
+        if(!authDAO.isAuth(login,request.getParameter("password"))){
             response.sendRedirect("/auth");
         }else {
             HttpSession session= request.getSession();
@@ -28,7 +29,6 @@ public class AuthServlet extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         HttpSession session= request.getSession();
-        session.setAttribute("SessionId","");
         session.setMaxInactiveInterval(-1);
         Cookie cookie=new Cookie("SessionId",session.getId());
         cookie.setMaxAge(0);

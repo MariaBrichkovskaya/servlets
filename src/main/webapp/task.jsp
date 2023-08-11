@@ -20,7 +20,7 @@
     CheckAuth.checkAuth(request, response);
 %>
 <%
-    List<TaskDTO> tasks = TaskDAO.getTasks();
+    List<TaskDTO> tasks = TaskDAO.getInstance().getTasks();
     for(TaskDTO task: tasks) {
         out.print("<b>Название: </b>" + task.getName() + "<br>");
         out.print("<b>Описание: </b>" + task.getDescription() + "<br>");
