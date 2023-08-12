@@ -1,7 +1,8 @@
 <%@ page import="com.example.servlets.dto.TaskDTO" %>
 <%@ page import="java.util.List" %>
 <%@ page import="com.example.servlets.dao.TaskDAO" %>
-<%@ page import="com.example.servlets.CheckAuth" %><%--
+<%@ page import="com.example.servlets.CheckAuth" %>
+<%@ page import="com.example.servlets.db.DBConnector" %><%--
   Created by IntelliJ IDEA.
   User: User
   Date: 09.08.2023
@@ -20,7 +21,7 @@
     CheckAuth.checkAuth(request, response);
 %>
 <%
-    List<TaskDTO> tasks = TaskDAO.getInstance().getTasks();
+    List<TaskDTO> tasks = TaskDAO.getInstance(DBConnector.INSTANCE).getTasks();
     for(TaskDTO task: tasks) {
         out.print("<b>Название: </b>" + task.getName() + "<br>");
         out.print("<b>Описание: </b>" + task.getDescription() + "<br>");

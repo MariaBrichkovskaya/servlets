@@ -9,35 +9,32 @@ import java.util.Objects;
 
 public class AuthDAO {
 
-    private AuthDAO(){
-    }
+
     private static volatile AuthDAO instance;
-    public static synchronized AuthDAO getInstance() {
+    private DBConnector dbConnector;
+    private AuthDAO(DBConnector dbConnector){
+        this.dbConnector=dbConnector;
+    }
+    public static synchronized AuthDAO getInstance(DBConnector dbConnector) {
         if (instance == null) {
-            instance = new AuthDAO();
+            instance = new AuthDAO(dbConnector);
         }
         return instance;
     }
         public boolean isAuth(String login,String password){
-        try(PreparedStatement statement = Objects.requireNonNull(DBConnector.getConnection()).prepareStatement("SELECT * FROM users where login=? and password=?");) {
+        try(PreparedStatement statement = Objects.requireNonNull(dbConnector.getConnection()).prepareStatement("SELECT * FROM users where login=? and password=?");) {
             statement.setString(1,login);
             statement.setString(2,password);
             ResultSet resultSet=statement.executeQuery();
 
-            if(resultSet.next())
-            {
-                return true;
-
-            }
-            else
-                return false;
+            return resultSet.next();
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
 
     }
     public void addUser(String login,String password){
-        try(PreparedStatement statement = Objects.requireNonNull(DBConnector.getConnection()).prepareStatement("INSERT INTO users (login, password) Values (?, ?)");) {
+        try(PreparedStatement statement = Objects.requireNonNull(dbConnector.getConnection()).prepareStatement("INSERT INTO users (login, password) Values (?, ?)");) {
             statement.setString(1, login);
             statement.setString(2, password);
             statement.executeUpdate();
@@ -47,7 +44,7 @@ public class AuthDAO {
     }
     public boolean isLoginUnique(String login) {
 
-        try(PreparedStatement statement = Objects.requireNonNull(DBConnector.getConnection()).prepareStatement("SELECT login FROM users WHERE login = ?");) {
+        try(PreparedStatement statement = Objects.requireNonNull(dbConnector.getConnection()).prepareStatement("SELECT login FROM users WHERE login = ?");) {
             statement.setString(1, login);
             ResultSet resultSet = statement.executeQuery();
             if (resultSet.next()) {

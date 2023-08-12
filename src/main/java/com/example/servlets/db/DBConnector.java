@@ -10,7 +10,8 @@ public class DBConnector {
     private static final String USER="root";
     private static final String PASS="Raznie71593)";
     //public static final Connection CONNECTION=getConnection();
-   public static Connection getConnection(){
+    public static final DBConnector INSTANCE = new DBConnector();
+   public Connection getConnection(){
        try {
            Class.forName("com.mysql.cj.jdbc.Driver");
            return DriverManager.getConnection(URL,USER,PASS);

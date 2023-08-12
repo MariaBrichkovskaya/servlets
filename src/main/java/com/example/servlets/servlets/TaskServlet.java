@@ -2,6 +2,7 @@ package com.example.servlets.servlets;
 
 import com.example.servlets.CheckAuth;
 import com.example.servlets.dao.TaskDAO;
+import com.example.servlets.db.DBConnector;
 import com.example.servlets.dto.TaskDTO;
 
 import jakarta.servlet.*;
@@ -14,7 +15,7 @@ import java.io.PrintWriter;
 
 @WebServlet(name = "taskServlet", value = "/taskServlet")
 public class TaskServlet extends HttpServlet {
-    private static final TaskDAO taskDAO=TaskDAO.getInstance();
+    private static final TaskDAO taskDAO=TaskDAO.getInstance(DBConnector.INSTANCE);
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
         PrintWriter out=response.getWriter();

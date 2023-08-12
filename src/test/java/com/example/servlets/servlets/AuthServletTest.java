@@ -17,9 +17,6 @@ class AuthServletTest {
     HttpServletRequest request = mock(HttpServletRequest.class);
     HttpServletResponse response = mock(HttpServletResponse.class);
     HttpSession session = mock(HttpSession.class);
-    Cookie cookie = mock(Cookie.class);
-
-
     @Test
     void doGet() throws IOException, ServletException {
         when(request.getSession()).thenReturn(session);

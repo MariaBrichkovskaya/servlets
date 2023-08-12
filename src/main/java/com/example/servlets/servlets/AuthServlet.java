@@ -1,6 +1,7 @@
 package com.example.servlets.servlets;
 
 import com.example.servlets.dao.AuthDAO;
+import com.example.servlets.db.DBConnector;
 import jakarta.servlet.*;
 import jakarta.servlet.http.*;
 import jakarta.servlet.annotation.*;
@@ -9,7 +10,7 @@ import java.io.IOException;
 
 @WebServlet(name = "AuthServlet", value = "/AuthServlet")
 public class AuthServlet extends HttpServlet {
-    private static final AuthDAO authDAO=AuthDAO.getInstance();
+    private static final AuthDAO authDAO = AuthDAO.getInstance(DBConnector.INSTANCE);
 
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
